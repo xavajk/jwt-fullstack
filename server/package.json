@@ -1,0 +1,39 @@
+{
+   "name": "server",
+   "type": "module",
+   "version": "0.0.1",
+   "$schema": "https://json.schemastore.org/tsconfig",
+   "extends": "@tsconfig/node-lts-strictest-esm/tsconfig.json",
+   "description": "Awesome project developed with TypeORM.",
+   "devDependencies": {
+      "@tsconfig/node-lts-strictest-esm": "^18.12.1",
+      "@types/jsonwebtoken": "^9.0.1",
+      "@types/node": "^18.11.18",
+      "nodemon": "^2.0.20",
+      "typescript": "^4.9.4"
+   },
+   "dependencies": {
+      "@apollo/server": "^4.3.2",
+      "argon2": "^0.30.3",
+      "body-parser": "^1.20.1",
+      "class-validator": "^0.14.0",
+      "cors": "^2.8.5",
+      "dotenv": "^16.0.3",
+      "graphql": "^16.6.0",
+      "jsonwebtoken": "^9.0.0",
+      "pg": "^8.9.0",
+      "reflect-metadata": "^0.1.13",
+      "ts-node": "^10.9.1",
+      "type-graphql": "^2.0.0-beta.1",
+      "typeorm": "^0.3.11"
+   },
+   "scripts": {
+      "start": "nodemon --exec ts-node-esm src/index.ts"
+   },
+   "include": [
+      "/**/*.ts"
+   ],
+   "exclude": [
+      "node_modules"
+   ]
+}
