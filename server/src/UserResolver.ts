@@ -1,9 +1,11 @@
-import { Resolver, Query, Mutation, Arg, ObjectType, Field, Ctx, UseMiddleware } from 'type-graphql';
+import { Resolver, Query, Mutation, Arg, ObjectType, Field, Ctx, UseMiddleware, Int } from 'type-graphql';
 import { createAccessToken, createRefreshToken } from './auth.js'
 import { MyContext } from './MyContext.js';
 import { User } from './entity/User.js';
 import { isAuth } from './isAuth.js';
 import * as argon2 from "argon2";
+import { sendRefreshToken } from './sendRefreshToken.js';
+import { AppDataSource } from './data-source.js';
 
 @ObjectType()
 class LoginResponse {
@@ -30,6 +32,17 @@ export class UserResolver {
         return User.find();
     }
 
+    @Mutation(() => Boolean)
+    async revokeRefreshTokensForUser(
+        @Arg('userId', () => Int) userId: number
+    ) {
+        await AppDataSource
+            .getRepository(User)
+            .increment({ id: userId }, 'tokenVersion', 1);
+
+        return true;
+    }
+
     @Mutation(() => LoginResponse)
     async login(
         @Arg('email') email: string,
@@ -47,7 +60,7 @@ export class UserResolver {
         }
 
         // login successful
-        res.cookie('jid', createRefreshToken(user), { httpOnly: true });
+        sendRefreshToken(res, createRefreshToken(user));
 
         return {
             accessToken: createAccessToken(user)
